@@ -22,7 +22,7 @@ $ npm i next-authentication --save
 
 `next-authorization` doesn't know anything about the backend. The only requirement is a string that we use as token, when this is provided we use the `login` function to save the session and keep the user logged-in.
 
-```
+```js
 import { Component } from 'react'
 import { login } from 'next-authentication'
 
@@ -100,22 +100,25 @@ class Login extends Component {
 }
 
 export default Login
-
 ```
 
 ### Logout
 
 The `login` function deletes the session and redirects the user to the route given.
 
-```
+```js
 import Link from 'next/link'
 import { logout } from 'next-authorization'
 
 const Header = props => (
   <header>
     <nav>
-      <Link href="/"><a>Home</a></Link>
-      <Link href="/login><a>Login</a></Link>
+      <Link href="/">
+        <a>Home</a>
+      </Link>
+      <Link href="/login">
+        <a>Login</a>
+      </Link>
       <button onClick={() => logout('/login')}>Logout</button>
     </nav>
   </header>
@@ -128,11 +131,10 @@ export default Header
 
 `next-authorization` provides a default High Order Component called `withAuth` let the user view the page if the session is valid and redirects the user otherwise.
 
-```
+```js
 import withAuth from 'next-authentication'
 
-const Profile = props =>
-	<div>User is logged in</div>
+const Profile = props => <div>User is logged in</div>
 
 const authOptions = { redirect: '/login' }
 export default withAuth(authOptions)(Profile)
