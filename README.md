@@ -58,7 +58,8 @@ class Login extends Component {
       })
 
       if (response.ok) {
-        // `next-authorization` doesn't know anything about the backend, the only thing it needs is a string we use as a token
+        // `next-authorization` doesn't know anything about the backend,
+        // the only thing it needs is a string we use as a token
         const { token } = await response.json()
         const loginOptions = {
           token,
