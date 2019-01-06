@@ -1,6 +1,6 @@
 {
   "name": "next-authentication",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Authentication & Authorization Library for the Next.js Framework",
   "main": "dist/next-authentication.js",
   "umd:main": "dist/next-authentication.umd.js",
@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "js-cookie": "^2.2.0",
-    "next-cookies": "^1.0.4"
+    "next-cookies": "^1.0.4",
+    "react": "^16.7.0"
   }
 }

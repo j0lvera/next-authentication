@@ -5,25 +5,35 @@ import builtins from 'rollup-plugin-node-builtins'
 
 export default {
   input: 'src/index.js',
+  external: ['react', 'js-cookie', 'next-cookies'],
   output: [
     {
       file: 'dist/next-authentication.js',
-      format: 'cjs'
+      format: 'cjs',
+      exports: 'named',
+      globals: {
+        react: 'React',
+        'next-cookies': 'nextCookie',
+        'js-cookie': 'cookie'
+      }
     },
     {
       file: 'dist/next-authentication.umd.js',
       format: 'umd',
       name: 'nextAuthorization',
-      globals: { react: 'React', 'next/router': 'Router' }
+      exports: 'named',
+      globals: {
+        react: 'React',
+        'next-cookies': 'nextCookie',
+        'js-cookie': 'cookie'
+      }
     },
     {
       file: 'dist/next-authentication.mjs',
       format: 'esm',
-      name: 'nextAuthorization',
-      globals: { react: 'React', 'next/router': 'Router' }
+      name: 'nextAuthorization'
     }
   ],
-  external: ['react', 'next/router'],
   plugins: [
     builtins(),
     resolve(),
