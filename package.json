@@ -1,6 +1,6 @@
 {
   "name": "next-authentication",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Authentication & Authorization Library for the Next.js Framework",
   "main": "dist/next-authentication.js",
   "umd:main": "dist/next-authentication.umd.js",
@@ -8,7 +8,12 @@
   "source": "src/index.js",
   "scripts": {
     "build": "rollup -c",
-    "dev": "rollup -w"
+    "dev": "rollup -w",
+    "release": "cross-var npm run build && cross-var git commit -am $npm_package_version && cross-var git tag $npm_package_version && git push && git push --tags && npm publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/j0lv3r4/next-authentication.git"
   },
   "keywords": [
     "authentication",
@@ -20,12 +25,17 @@
     "auth",
     "next.js"
   ],
-  "author": "Juan Olvera (https://jolvera.biz)",
+  "author": "Juan Olvera <jolvera@posteo.de>",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/j0lv3r4/next-authentication/issues"
+  },
+  "homepage": "https://github.com/j0lv3r4/next-authentication",
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-react": "^7.0.0",
+    "cross-var": "^1.1.0",
     "prettier": "^1.15.3",
     "rollup": "^0.68.2",
     "rollup-plugin-babel": "^4.1.0",
