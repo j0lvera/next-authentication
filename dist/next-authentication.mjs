@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import Router from 'next/router';
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
@@ -2703,125 +2703,139 @@ var js_cookie = createCommonjsModule(function (module, exports) {
 }));
 });
 
-var logout = function logout() {
+var login = function login(_ref) {
+  var token = _ref.token,
+      cookieOptions = _ref.cookieOptions,
+      redirect = _ref.redirect;
+  js_cookie.set('token', token, cookieOptions);
+  Router.push(redirect);
+};
+var logout = function logout(redirect) {
   js_cookie.remove('token'); // to support logging out from all windows
 
   window.localStorage.setItem('logout', Date.now());
-  Router.push('/login');
+  Router.push(redirect);
 };
-var getCookie = nextCookies;
-function withAuthSync(WrappedComponent) {
-  return (
-    /*#__PURE__*/
-    function (_Component) {
-      _inherits(Auth, _Component);
+function withAuth(_ref2) {
+  var redirect = _ref2.redirect;
+  return function withAuthFactory(WrappedComponent) {
+    return (
+      /*#__PURE__*/
+      function (_Component) {
+        _inherits(Auth, _Component);
 
-      _createClass(Auth, null, [{
-        key: "getInitialProps",
-        value: function () {
-          var _getInitialProps = _asyncToGenerator(
-          /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee(ctx) {
-            var token, componentProps;
-            return regeneratorRuntime.wrap(function _callee$(_context) {
-              while (1) {
-                switch (_context.prev = _context.next) {
-                  case 0:
-                    token = auth(ctx);
-                    _context.t0 = WrappedComponent.getInitialProps;
+        _createClass(Auth, null, [{
+          key: "getInitialProps",
+          value: function () {
+            var _getInitialProps = _asyncToGenerator(
+            /*#__PURE__*/
+            regeneratorRuntime.mark(function _callee(context) {
+              var token, componentProps;
+              return regeneratorRuntime.wrap(function _callee$(_context) {
+                while (1) {
+                  switch (_context.prev = _context.next) {
+                    case 0:
+                      token = auth({
+                        context: context,
+                        redirect: redirect
+                      });
+                      _context.t0 = WrappedComponent.getInitialProps;
 
-                    if (!_context.t0) {
-                      _context.next = 6;
-                      break;
-                    }
+                      if (!_context.t0) {
+                        _context.next = 6;
+                        break;
+                      }
 
-                    _context.next = 5;
-                    return WrappedComponent.getInitialProps(ctx);
+                      _context.next = 5;
+                      return WrappedComponent.getInitialProps(context);
 
-                  case 5:
-                    _context.t0 = _context.sent;
+                    case 5:
+                      _context.t0 = _context.sent;
 
-                  case 6:
-                    componentProps = _context.t0;
-                    return _context.abrupt("return", _objectSpread({}, componentProps, {
-                      token: token
-                    }));
+                    case 6:
+                      componentProps = _context.t0;
+                      return _context.abrupt("return", _objectSpread({}, componentProps, {
+                        token: token
+                      }));
 
-                  case 8:
-                  case "end":
-                    return _context.stop();
+                    case 8:
+                    case "end":
+                      return _context.stop();
+                  }
                 }
-              }
-            }, _callee, this);
-          }));
+              }, _callee, this);
+            }));
 
-          function getInitialProps(_x) {
-            return _getInitialProps.apply(this, arguments);
+            function getInitialProps(_x) {
+              return _getInitialProps.apply(this, arguments);
+            }
+
+            return getInitialProps;
+          }()
+        }]);
+
+        function Auth(props) {
+          var _this;
+
+          _classCallCheck(this, Auth);
+
+          _this = _possibleConstructorReturn(this, _getPrototypeOf(Auth).call(this, props));
+          _this.syncLogout = _this.syncLogout.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+          return _this;
+        }
+
+        _createClass(Auth, [{
+          key: "componentDidMount",
+          value: function componentDidMount() {
+            window.addEventListener('storage', this.syncLogout);
           }
-
-          return getInitialProps;
-        }()
-      }]);
-
-      function Auth(props) {
-        var _this;
-
-        _classCallCheck(this, Auth);
-
-        _this = _possibleConstructorReturn(this, _getPrototypeOf(Auth).call(this, props));
-        _this.syncLogout = _this.syncLogout.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-        return _this;
-      }
-
-      _createClass(Auth, [{
-        key: "componentDidMount",
-        value: function componentDidMount() {
-          window.addEventListener('storage', this.syncLogout);
-        }
-      }, {
-        key: "componentWillUnmount",
-        value: function componentWillUnmount() {
-          window.removeEventListener('storage', this.syncLogout);
-          window.localStorage.removeItem('logout');
-        }
-      }, {
-        key: "syncLogout",
-        value: function syncLogout(event) {
-          if (event.key === 'logout') {
-            console.log('logged out from storage!');
-            Router.push('/login');
+        }, {
+          key: "componentWillUnmount",
+          value: function componentWillUnmount() {
+            window.removeEventListener('storage', this.syncLogout);
+            window.localStorage.removeItem('logout');
           }
-        }
-      }, {
-        key: "render",
-        value: function render() {
-          return React.createElement(WrappedComponent, this.props);
-        }
-      }]);
+        }, {
+          key: "syncLogout",
+          value: function syncLogout(event) {
+            if (event.key === 'logout') {
+              Router.push(redirect);
+            }
+          }
+        }, {
+          key: "render",
+          value: function render() {
+            return React.createElement(WrappedComponent, this.props);
+          }
+        }]);
 
-      return Auth;
-    }(Component)
-  );
+        return Auth;
+      }(Component)
+    );
+  };
 }
-var auth = function auth(ctx) {
-  var failRedirect = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '/login';
+var auth = function auth(_ref3) {
+  var context = _ref3.context,
+      redirect = _ref3.redirect;
 
-  var _nextCookie = nextCookies(ctx),
+  var _nextCookie = nextCookies(context),
       token = _nextCookie.token;
 
-  if (ctx.req && !token) {
-    ctx.res.writeHead(302, {
-      Location: failRedirect
+  if (context.req && !token) {
+    context.res.writeHead(302, {
+      Location: redirect
     });
-    ctx.res.end();
+    context.res.end();
     return;
   }
 
   if (!token) {
-    Router.push(failRedirect);
+    Router.push(redirect);
   }
 
   return token;
 };
+var getCookie = nextCookies;
 
-export { logout, getCookie, withAuthSync, auth };
+export default withAuth;
+export { login, logout, auth, getCookie };
