@@ -137,8 +137,7 @@ const Profile = props => <div>User is logged in</div>
 const authOptions = {
   // client callback for invalid sessions
   callback: () => Router.push('/login'),
-  // the server takes care of the redirect, only pass a string
-  // with the route
+  // the server takes care of the redirect, only pass a string with the route
   serverRedirect: '/login'
 }
 export default withAuth(authOptions)(Profile)
@@ -148,7 +147,7 @@ export default withAuth(authOptions)(Profile)
 
 ### login(config)
 
-`next-authentication` uses [`js-cookie`](https://www.npmjs.com/package/js-cookie) for cookie handling so you can pass the same configuration object to the `cookieOptions` option.
+`next-authentication` uses [`js-cookie`](https://www.npmjs.com/package/js-cookie) for cookie handling, so you can pass the same configuration object to the `cookieOptions` option.
 
 ```js
 // Login a user
