@@ -1,5 +1,4 @@
 import React from 'react'
-import Router from 'next/router'
 import nextCookie from 'next-cookies'
 import cookie from 'js-cookie'
 
@@ -44,7 +43,7 @@ export default function withAuth({ callback, serverRedirect }) {
 
       syncLogout(event) {
         if (event.key === 'logout') {
-          Router.push(redirect)
+          callback()
         }
       }
 
