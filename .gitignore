@@ -23,7 +23,8 @@
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -117,6 +118,7 @@ typings/
 # vuepress build output
 .vuepress/dist
 
+
 # Serverless directories
 .serverless
 
@@ -147,3 +149,5 @@ tags
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+dist

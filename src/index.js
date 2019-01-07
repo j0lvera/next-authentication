@@ -1,25 +1,24 @@
-import { Component } from 'react'
-import Router from 'next/router'
+import React from 'react'
 import nextCookie from 'next-cookies'
 import cookie from 'js-cookie'
 
-export const login = ({ token, cookieOptions, redirect }) => {
+export const login = ({ token, cookieOptions, callback }) => {
   cookie.set('token', token, cookieOptions)
-  Router.push(redirect)
+  callback()
 }
 
-export const logout = redirect => {
+export const logout = callback => {
   cookie.remove('token')
   // to support logging out from all windows
   window.localStorage.setItem('logout', Date.now())
-  Router.push(redirect)
+  callback()
 }
 
-export default function withAuth({ redirect }) {
+export default function withAuth({ callback, serverRedirect }) {
   return function withAuthFactory(WrappedComponent) {
-    return class Auth extends Component {
+    return class Auth extends React.Component {
       static async getInitialProps(context) {
-        const token = auth({ context, redirect })
+        const token = auth({ context, callback, serverRedirect })
 
         const componentProps =
           WrappedComponent.getInitialProps &&
@@ -44,7 +43,7 @@ export default function withAuth({ redirect }) {
 
       syncLogout(event) {
         if (event.key === 'logout') {
-          Router.push(redirect)
+          callback()
         }
       }
 
@@ -55,17 +54,17 @@ export default function withAuth({ redirect }) {
   }
 }
 
-export const auth = ({ context, redirect }) => {
+export const auth = ({ context, callback, serverRedirect }) => {
   const { token } = nextCookie(context)
 
-  if (context.req && !token) {
-    context.res.writeHead(302, { Location: redirect })
+  if (context.req && !token && serverRedirect) {
+    context.res.writeHead(302, { Location: serverRedirect })
     context.res.end()
     return
   }
 
   if (!token) {
-    Router.push(redirect)
+    callback()
   }
 
   return token

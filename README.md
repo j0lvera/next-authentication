@@ -18,12 +18,11 @@ $ npm i next-authentication --save
 
 ## Usage
 
-### Login users
-
-`next-authorization` doesn't know anything about the backend. The only requirement is a string that we use as token, when this is provided we use the `login` function to save the session and keep the user logged-in.
+### Login a user
 
 ```js
 import { Component } from 'react'
+import Router from 'next/router'
 import { login } from 'next-authentication'
 
 class Login extends Component {
@@ -58,16 +57,12 @@ class Login extends Component {
       })
 
       if (response.ok) {
-        // `next-authorization` doesn't know anything about the backend,
-        // the only thing it needs is a string we use as a token
         const { token } = await response.json()
         const loginOptions = {
           token,
           cookieOptions: { expires: 1 },
-          redirect: '/profile'
+          callback: () => Router.push('/profile')
         }
-
-        // Saves session and redirects the user to the route you chose
         login(loginOptions)
       } else {
         console.log('Login failed.')
@@ -105,42 +100,94 @@ export default Login
 
 ### Logout
 
-The `login` function deletes the session and redirects the user to the route given.
-
 ```js
 import Link from 'next/link'
+import Router from 'next/router'
 import { logout } from 'next-authorization'
 
-const Header = props => (
-  <header>
-    <nav>
-      <Link href="/">
-        <a>Home</a>
-      </Link>
-      <Link href="/login">
-        <a>Login</a>
-      </Link>
-      <button onClick={() => logout('/login')}>Logout</button>
-    </nav>
-  </header>
-)
+const Header = props => {
+  const redirect = () => Router.push('/login')
+  const userLogout = () => logout(redirect)
+  return (
+    <header>
+      <nav>
+        <Link href="/">
+          <a>Home</a>
+        </Link>
+        <Link href="/login">
+          <a>Login</a>
+        </Link>
+        <button onClick={userLogout}>Logout</button>
+      </nav>
+    </header>
+  )
+}
 
 export default Header
 ```
 
 ### Restrict pages to logged-in users
 
-`next-authorization` provides a default High Order Component called `withAuth` let the user view the page if the session is valid and redirects the user otherwise.
-
 ```js
+import Router from 'next/router'
 import withAuth from 'next-authentication'
 
 const Profile = props => <div>User is logged in</div>
 
-const authOptions = { redirect: '/login' }
+const authOptions = {
+  // client callback for invalid sessions
+  callback: () => Router.push('/login'),
+  // the server takes care of the redirect, only pass a string
+  // with the route
+  serverRedirect: '/login'
+}
 export default withAuth(authOptions)(Profile)
 ```
 
-## Example
+## next-authorization API
 
-_Coming soon_
+### login(config)
+
+`next-authentication` uses [`js-cookie`](https://www.npmjs.com/package/js-cookie) for cookie handling so you can pass the same configuration object to the `cookieOptions` option.
+
+```js
+// Login a user
+login({
+  token: '',
+  cookieOptions: { expires: 7, path: '' },
+  callback: () => {
+    console.log('Do something after the user is logged in.')
+  }
+})
+```
+
+### logout(callback)
+
+```js
+logout(() => {
+  console.log('Do something after the user is logged out.')
+})
+```
+
+### withAuth(config)
+
+```js
+withAuth({
+  serverRedirect: '/login'
+  callback: () => {
+    console.log('Do something if the session is invalid.')
+  },
+})(Component)
+```
+
+### auth(config)
+
+```js
+auth({
+  serverRedirect: '/login'
+  callback: () => {
+    console.log('Do something if the session is invalid.'),
+  },
+  content: ctx // context instance from `getInitnialProps`,
+})
+```
