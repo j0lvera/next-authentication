@@ -1,6 +1,6 @@
 {
   "name": "next-authentication",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Authentication & Authorization Library for the Next.js Framework",
   "main": "dist/next-authentication.js",
   "umd:main": "dist/next-authentication.umd.js",
