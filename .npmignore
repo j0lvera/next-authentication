@@ -1,3 +1,5 @@
 rollup.config.js
 src
 package-lock.json
+yarn.lock
+examples

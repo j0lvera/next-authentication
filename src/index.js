@@ -69,5 +69,3 @@ export const auth = ({ context, callback, serverRedirect }) => {
 
   return token
 }
-
-export const getCookie = nextCookie
