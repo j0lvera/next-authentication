@@ -1,4 +1,6 @@
 # Next Authentication
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fj0lv3r4%2Fnext-authentication.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fj0lv3r4%2Fnext-authentication?ref=badge_shield)
+
 
 `next-authorization` is an authentication &amp; authorization library for the Next framework. It provides user session management and handles logging in, logging out.
 
@@ -191,3 +193,7 @@ auth({
   content: ctx // context instance from `getInitnialProps`,
 })
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fj0lv3r4%2Fnext-authentication.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fj0lv3r4%2Fnext-authentication?ref=badge_large)
