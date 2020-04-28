@@ -5,17 +5,22 @@ import nookies from "nookies";
 
 /**
  * Saves the session token in a cookie
- * @param {Object} ctx
+ * @param {object} ctx
  * @param {string} token
- * @param {Object} cookieOptions
- * @param {Function} callback
- * @returns {Function} callback
+ * @param {object} cookieOptions
+ * @param {function} callback
+ * @returns {function} callback
  */
 function login(ctx, { token, cookieOptions, callback }) {
   nookies.set(ctx, "token", token, cookieOptions);
   return callback();
 }
 
+/**
+ * Destroys the session and triggers logout event
+ * @param {object} ctx
+ * @param {function} callback
+ */
 function logout(ctx, callback) {
   nookies.destroy(ctx, "token");
   // to support logging out from all windows

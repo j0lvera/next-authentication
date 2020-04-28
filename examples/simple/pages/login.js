@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import fetch from "isomorphic-unfetch";
 import Layout from "../components/layout";
-import { login } from "next-authentication";
+import { login } from "../../../dist/next-authentication.esm";
 import Router from "next/router";
 
 function Login() {
@@ -23,13 +23,15 @@ function Login() {
       });
       if (response.status === 200) {
         const { token } = await response.json();
-        // await login({ token })
         const loginOptions = {
           token,
-          cookieOptions: { expires: 1 },
+          cookieOptions: {
+            maxAge: 30 * 24 * 60 * 60,
+            path: "/"
+          },
           callback: () => Router.push("/profile")
         };
-        login(loginOptions);
+        login({}, loginOptions);
       } else {
         console.log("Login failed.");
         // https://github.com/developit/unfetch#caveats
@@ -44,6 +46,9 @@ function Login() {
       );
 
       const { response } = error;
+
+      console.error(response);
+
       setUserData(
         Object.assign({}, userData, {
           error: response ? response.statusText : error.message

@@ -3,7 +3,7 @@ import Router from "next/router";
 import fetch from "isomorphic-unfetch";
 import nextCookie from "next-cookies";
 import Layout from "../components/layout";
-import withAuth from "next-authentication";
+import { withAuth } from "../../../dist/next-authentication";
 import getHost from "../utils/get-host";
 
 const Profile = props => {
@@ -73,7 +73,14 @@ Profile.getInitialProps = async ctx => {
 };
 
 const authOptions = {
-  callback: () => Router.push("/login"),
+  onError: ctx => {
+    console.log("ctx", ctx);
+    if (typeof window === "undefined") {
+      ctx.res.writeHead(302, { Location: "/login" });
+    } else {
+      Router.push("/login");
+    }
+  },
   serverRedirect: "/login"
 };
 export default withAuth(authOptions)(Profile);

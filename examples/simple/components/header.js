@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { logout } from "next-authentication";
+import { logout } from "../../../dist/next-authentication.esm";
 import Router from "next/router";
 
 const Header = props => (
@@ -24,7 +24,7 @@ const Header = props => (
         <li>
           <button
             onClick={() => {
-              logout(() => Router.push("/login"));
+              logout({}, () => Router.push("/login"));
             }}
           >
             Logout

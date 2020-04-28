@@ -1,5 +1,5 @@
-import React from 'react'
-import Layout from '../components/layout'
+import React from "react";
+import Layout from "../components/layout";
 
 const Home = () => (
   <Layout>
@@ -24,6 +24,6 @@ const Home = () => (
       }
     `}</style>
   </Layout>
-)
+);
 
-export default Home
+export default Home;
