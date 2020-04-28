@@ -1,71 +1,80 @@
-import React from 'react'
-import nextCookie from 'next-cookies'
-import cookie from 'js-cookie'
+// @ts-check
 
-export const login = ({ token, cookieOptions, callback }) => {
-  cookie.set('token', token, cookieOptions)
-  callback()
+import React from "react";
+import nookies from "nookies";
+
+/**
+ * Saves the session token in a cookie
+ * @param {Object} ctx
+ * @param {string} token
+ * @param {Object} cookieOptions
+ * @param {Function} callback
+ * @returns {Function} callback
+ */
+function login(ctx, { token, cookieOptions, callback }) {
+  nookies.set(ctx, "token", token, cookieOptions);
+  return callback();
 }
 
-export const logout = callback => {
-  cookie.remove('token')
+function logout(ctx, callback) {
+  nookies.destroy(ctx, "token");
   // to support logging out from all windows
-  window.localStorage.setItem('logout', Date.now())
-  callback()
+  window.localStorage.setItem("logout", Date.now());
+  callback();
 }
 
-export default function withAuth({ callback, serverRedirect }) {
+function withAuth({ onError }) {
   return function withAuthFactory(WrappedComponent) {
     return class Auth extends React.Component {
-      static async getInitialProps(context) {
-        const token = auth({ context, callback, serverRedirect })
+      static async getInitialProps(ctx) {
+        const token = auth(ctx, { onError });
 
         const componentProps =
           WrappedComponent.getInitialProps &&
-          (await WrappedComponent.getInitialProps(context))
+          (await WrappedComponent.getInitialProps(ctx));
 
-        return { ...componentProps, token }
+        return { ...componentProps, token };
       }
 
       constructor(props) {
-        super(props)
-        this.syncLogout = this.syncLogout.bind(this)
+        super(props);
+        this.syncLogout = this.syncLogout.bind(this);
       }
 
       componentDidMount() {
-        window.addEventListener('storage', this.syncLogout)
+        window.addEventListener("storage", this.syncLogout);
       }
 
       componentWillUnmount() {
-        window.removeEventListener('storage', this.syncLogout)
-        window.localStorage.removeItem('logout')
+        window.removeEventListener("storage", this.syncLogout);
+        window.localStorage.removeItem("logout");
       }
 
       syncLogout(event) {
-        if (event.key === 'logout') {
-          callback()
+        if (event.key === "logout") {
+          callback();
         }
       }
 
       render() {
-        return <WrappedComponent {...this.props} />
+        return <WrappedComponent {...this.props} />;
       }
-    }
-  }
+    };
+  };
 }
 
-export const auth = ({ context, callback, serverRedirect }) => {
-  const { token } = nextCookie(context)
+function getCookie(ctx) {
+  return nookies.get(ctx);
+}
 
-  if (context.req && !token && serverRedirect) {
-    context.res.writeHead(302, { Location: serverRedirect })
-    context.res.end()
-    return
-  }
+function auth(ctx, { onError }) {
+  const { token } = nookies.get(ctx);
 
   if (!token) {
-    callback()
+    onError(ctx);
   }
 
-  return token
+  return token;
 }
+
+export { login, auth, withAuth, getCookie, logout };
