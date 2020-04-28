@@ -3,8 +3,7 @@
   "version": "0.1.1",
   "description": "Authentication & Authorization Library for the Next.js Framework",
   "main": "dist/next-authentication.js",
-  "umd:main": "dist/next-authentication.umd.js",
-  "module": "dist/next-authentication.mjs",
+  "module": "dist/next-authentication.esm.js",
   "source": "src/index.js",
   "scripts": {
     "build": "rollup -c",
@@ -37,15 +36,19 @@
     "@babel/preset-react": "^7.0.0",
     "cross-var": "^1.1.0",
     "prettier": "^1.15.3",
+    "react": "^16.12.0",
     "rollup": "^0.68.2",
     "rollup-plugin-babel": "^4.1.0",
     "rollup-plugin-commonjs": "^9.2.0",
-    "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-resolve": "^4.0.0"
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "rollup-plugin-peer-deps-external": "^2.2.2"
   },
   "dependencies": {
-    "js-cookie": "^2.2.0",
-    "next-cookies": "^1.0.4",
-    "react": "^16.7.0"
+    "core-js": "^3.6.4",
+    "nookies": "^2.0.8",
+    "regenerator-runtime": "^0.13.3"
+  },
+  "peerDependencies": {
+    "react": "^16.12.0"
   }
 }
