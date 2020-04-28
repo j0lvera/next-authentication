@@ -23,93 +23,45 @@ $ npm i next-authentication --save
 ### Login a user
 
 ```js
-import { Component } from 'react'
-import Router from 'next/router'
-import { login } from 'next-authentication'
+import { login } from 'next-authentication';
 
-class Login extends Component {
-  constructor(props) {
-    super(props)
+try {
+  const response = await fetch('https://apiurl.io', {
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password })
+  });
 
-    this.state = {
-      username: '',
-      password: ''
-    }
+  if (response.ok) {
+    const { token } = await response.json();
+    const loginOptions = {
+      token,
+      cookieOptions: {
+        maxAge: 30 * 24 * 60 * 60,
+        path: "/"
+      },
+      callback: () => Router.push("/profile")
+    };
 
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
+    login(loginOptions);
+  } else {
+    console.log('Login failed.');
   }
-
-  handleChange(event) {
-    const { name, value } = event.target
-    this.setState({
-      [name]: value
-    })
-  }
-
-  async handleSubmit(event) {
-    event.preventDefault()
-    const { username, password } = this.state
-
-    try {
-      const response = await fetch('https://apiurl.io', {
-        method: 'post',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      })
-
-      if (response.ok) {
-        const { token } = await response.json()
-        const loginOptions = {
-          token,
-          cookieOptions: { expires: 1 },
-          callback: () => Router.push('/profile')
-        }
-        login(loginOptions)
-      } else {
-        console.log('Login failed.')
-      }
-    } catch (error) {
-      console.log('Implementation or Network error.')
-    }
-  }
-
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <label htmlFor="username">Username</label>
-        <input
-          type="text"
-          name="username"
-          value={this.state.username}
-          onChange={this.handleChange}
-        />
-
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          name="password"
-          value={this.state.password}
-          onChange={this.handleChange}
-        />
-      </form>
-    )
-  }
+} catch (error) {
+  console.log('Implementation or Network error.');
 }
-
-export default Login
 ```
 
 ### Logout
 
 ```js
-import Link from 'next/link'
-import Router from 'next/router'
-import { logout } from 'next-authorization'
+import Link from 'next/link';
+import Router from 'next/router';
+import { logout } from 'next-authorization';
 
 const Header = props => {
-  const redirect = () => Router.push('/login')
-  const userLogout = () => logout(redirect)
+  const redirect = () => Router.push('/login');
+  const userLogout = () => logout(redirect);
   return (
     <header>
       <nav>
@@ -122,10 +74,10 @@ const Header = props => {
         <button onClick={userLogout}>Logout</button>
       </nav>
     </header>
-  )
+  );
 }
 
-export default Header
+export default Header;
 ```
 
 ### Restrict pages to logged-in users
@@ -143,55 +95,58 @@ const authOptions = {
   // with the route
   serverRedirect: '/login'
 }
-export default withAuth(authOptions)(Profile)
+export default withAuth(authOptions)(Profile);
 ```
 
 ## next-authorization API
 
-### login(config)
+### login(ctx, config)
 
-`next-authentication` uses [`js-cookie`](https://www.npmjs.com/package/js-cookie) for cookie handling so you can pass the same configuration object to the `cookieOptions` option.
+`next-authentication` uses [`nookies`](https://www.npmjs.com/package/nookies) for cookie handling so you can pass the same configuration object to the `cookieOptions` option.
 
 ```js
 // Login a user
-login({
+login(ctx, {
   token: '',
-  cookieOptions: { expires: 7, path: '' },
+  cookieOptions: {
+    maxAge: 30 * 24 * 60 * 60,
+    path: '/',
+  },
   callback: () => {
     console.log('Do something after the user is logged in.')
   }
-})
+});
 ```
 
-### logout(callback)
+### logout(ctx, callback)
 
 ```js
-logout(() => {
+logout(ctx, () => {
   console.log('Do something after the user is logged out.')
-})
+});
 ```
 
 ### withAuth(config)
 
 ```js
 withAuth({
-  serverRedirect: '/login'
-  callback: () => {
+  serverRedirect: '/login',
+  onError: (ctx) => {
     console.log('Do something if the session is invalid.')
   },
-})(Component)
+})(Component);
 ```
 
 ### auth(config)
 
 ```js
 auth({
-  serverRedirect: '/login'
+  serverRedirect: '/login',
   callback: () => {
-    console.log('Do something if the session is invalid.'),
+    console.log('Do something if the session is invalid.');
   },
   content: ctx // context instance from `getInitnialProps`,
-})
+});
 ```
 
 
