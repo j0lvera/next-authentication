@@ -1,85 +1,25 @@
 // @ts-check
 
-import React from "react";
-import nookies from "nookies";
+import { setCookie, getCookie, encrypt } from "./cookies";
 
 /**
- * Saves the session token in a cookie
- * @param {object} ctx
- * @param {string} token
- * @param {object} cookieOptions
- * @param {function} callback
- * @returns {function} callback
+ * @param {ServerResponse} res
+ * @param {string} value
+ * @param {Function} callback
  */
-function login(ctx, { token, cookieOptions, callback }) {
-  nookies.set(ctx, "token", token, cookieOptions);
-  return callback();
+async function logIn(res, verify) {
+  // TODO
+  // 1. Verify the credentials using the user's `verify` function
+  // 2. If verified then
+  //   2.1 Encrypts user id or a random uuid
+  //   2.2 Generate JWT
+  //   2.3 Set cookie with JWT
+  // 3. Else
+  //   3.1 Return unauthorized error (Not sure if I should throw an exception or return the status code directl
 }
 
-/**
- * Destroys the session and triggers logout event
- * @param {object} ctx
- * @param {function} callback
- */
 function logout(ctx, callback) {
-  nookies.destroy(ctx, "token");
-  // to support logging out from all windows
-  window.localStorage.setItem("logout", Date.now());
-  callback();
+  // TODO
 }
 
-function withAuth({ onError }) {
-  return function withAuthFactory(WrappedComponent) {
-    return class Auth extends React.Component {
-      static async getInitialProps(ctx) {
-        const token = auth(ctx, { onError });
-
-        const componentProps =
-          WrappedComponent.getInitialProps &&
-          (await WrappedComponent.getInitialProps(ctx));
-
-        return { ...componentProps, token };
-      }
-
-      constructor(props) {
-        super(props);
-        this.syncLogout = this.syncLogout.bind(this);
-      }
-
-      componentDidMount() {
-        window.addEventListener("storage", this.syncLogout);
-      }
-
-      componentWillUnmount() {
-        window.removeEventListener("storage", this.syncLogout);
-        window.localStorage.removeItem("logout");
-      }
-
-      syncLogout(event) {
-        if (event.key === "logout") {
-          callback();
-        }
-      }
-
-      render() {
-        return <WrappedComponent {...this.props} />;
-      }
-    };
-  };
-}
-
-function getCookie(ctx) {
-  return nookies.get(ctx);
-}
-
-function auth(ctx, { onError }) {
-  const { token } = nookies.get(ctx);
-
-  if (!token) {
-    onError(ctx);
-  }
-
-  return token;
-}
-
-export { login, auth, withAuth, getCookie, logout };
+export { getCookie, logout, logIn, setCookie };

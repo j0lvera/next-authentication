@@ -9,13 +9,13 @@ export default [
     input: "src/index.js",
     output: [
       { file: pkg.main, format: "cjs" },
-      { file: pkg.module, format: "es" }
+      { file: pkg.module, format: "es" },
     ],
     plugins: [
       external(),
       babel({ exclude: "node_modules/**", runtimeHelpers: true }),
       resolve(),
-      commonjs()
-    ]
-  }
+      commonjs(),
+    ],
+  },
 ];

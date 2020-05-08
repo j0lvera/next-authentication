@@ -2,7 +2,7 @@ import Link from "next/link";
 import { logout } from "../../../dist/next-authentication.esm";
 import Router from "next/router";
 
-const Header = props => (
+const Header = (props) => (
   <header>
     <nav>
       <ul>

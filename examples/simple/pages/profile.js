@@ -6,7 +6,7 @@ import Layout from "../components/layout";
 import { withAuth } from "../../../dist/next-authentication";
 import getHost from "../utils/get-host";
 
-const Profile = props => {
+const Profile = (props) => {
   const { name, login, bio, avatarUrl } = props.data;
 
   return (
@@ -41,7 +41,7 @@ const Profile = props => {
   );
 };
 
-Profile.getInitialProps = async ctx => {
+Profile.getInitialProps = async (ctx) => {
   const { token } = nextCookie(ctx);
   const apiUrl = getHost(ctx.req) + "/api/profile";
 
@@ -54,8 +54,8 @@ Profile.getInitialProps = async ctx => {
     const response = await fetch(apiUrl, {
       credentials: "include",
       headers: {
-        Authorization: JSON.stringify({ token })
-      }
+        Authorization: JSON.stringify({ token }),
+      },
     });
 
     if (response.ok) {
@@ -73,7 +73,7 @@ Profile.getInitialProps = async ctx => {
 };
 
 const authOptions = {
-  onError: ctx => {
+  onError: (ctx) => {
     console.log("ctx", ctx);
     if (typeof window === "undefined") {
       ctx.res.writeHead(302, { Location: "/login" });
@@ -81,6 +81,6 @@ const authOptions = {
       Router.push("/login");
     }
   },
-  serverRedirect: "/login"
+  serverRedirect: "/login",
 };
 export default withAuth(authOptions)(Profile);

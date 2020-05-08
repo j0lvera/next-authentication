@@ -19,7 +19,7 @@ function Login() {
         method: "POST",
 
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username })
+        body: JSON.stringify({ username }),
       });
       if (response.status === 200) {
         const { token } = await response.json();
@@ -27,9 +27,9 @@ function Login() {
           token,
           cookieOptions: {
             maxAge: 30 * 24 * 60 * 60,
-            path: "/"
+            path: "/",
           },
-          callback: () => Router.push("/profile")
+          callback: () => Router.push("/profile"),
         };
         login({}, loginOptions);
       } else {
@@ -51,7 +51,7 @@ function Login() {
 
       setUserData(
         Object.assign({}, userData, {
-          error: response ? response.statusText : error.message
+          error: response ? response.statusText : error.message,
         })
       );
     }
@@ -68,7 +68,7 @@ function Login() {
             id="username"
             name="username"
             value={userData.username}
-            onChange={event =>
+            onChange={(event) =>
               setUserData(
                 Object.assign({}, userData, { username: event.target.value })
               )

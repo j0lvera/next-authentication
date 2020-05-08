@@ -8,7 +8,8 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -w",
-    "release": "cross-var npm run build && cross-var git commit -am $npm_package_version && cross-var git tag $npm_package_version && git push && git push --tags && npm publish"
+    "release": "cross-var npm run build && cross-var git commit -am $npm_package_version && cross-var git tag $npm_package_version && git push && git push --tags && npm publish",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -31,22 +32,32 @@
   },
   "homepage": "https://github.com/j0lv3r4/next-authentication",
   "devDependencies": {
-    "@babel/core": "^7.2.2",
-    "@babel/preset-env": "^7.2.3",
+    "@babel/core": "^7.9.6",
+    "@babel/helper-call-delegate": "^7.8.7",
+    "@babel/plugin-transform-modules-commonjs": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
     "@babel/preset-react": "^7.0.0",
+    "babel-jest": "^25.5.1",
     "cross-var": "^1.1.0",
-    "prettier": "^1.15.3",
-    "react": "^16.12.0",
+    "express": "^4.17.1",
+    "jest": "^25.5.3",
+    "prettier": "^2.0.5",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "rollup": "^0.68.2",
     "rollup-plugin-babel": "^4.1.0",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-node-resolve": "^4.0.0",
-    "rollup-plugin-peer-deps-external": "^2.2.2"
+    "rollup-plugin-peer-deps-external": "^2.2.2",
+    "supertest": "^4.0.2"
   },
   "dependencies": {
+    "@types/node": "^13.13.4",
+    "cookie": "^0.4.1",
     "core-js": "^3.6.4",
-    "nookies": "^2.0.8",
-    "regenerator-runtime": "^0.13.3"
+    "next": "^9.3.6",
+    "regenerator-runtime": "^0.13.3",
+    "simple-encryptor": "^3.0.0"
   },
   "peerDependencies": {
     "react": "^16.12.0"
