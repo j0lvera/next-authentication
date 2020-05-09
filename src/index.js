@@ -1,25 +1,43 @@
 // @ts-check
 
-import { setCookie, getCookie, encrypt } from "./cookies";
+import { setCookie, getCookie } from "./cookies";
+import { AuthError } from "./errors";
 
 /**
- * @param {ServerResponse} res
- * @param {string} value
- * @param {Function} callback
+ * Requires a `verify` function that accepts username and password and returns a
+ * user object or a falsy value.
+ *
+ * `req.body` comes parsed using API middlewares.
+ * https://nextjs.org/docs/api-routes/api-middlewares
+ *
+ * @param {IncomingMessage} req
+ * @param {Function} verify
+ * @returns {Object} user
  */
-async function logIn(res, verify) {
+async function authenticate(req, verify) {
+  if (!verify) {
+    throw new Error("The `verify` function parameter is missing");
+  }
+
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    throw new AuthError("Credentials are missing");
+  }
+
+  return await verify(username, password);
+}
+
+function logIn() {
   // TODO
-  // 1. Verify the credentials using the user's `verify` function
-  // 2. If verified then
-  //   2.1 Encrypts user id or a random uuid
-  //   2.2 Generate JWT
-  //   2.3 Set cookie with JWT
-  // 3. Else
-  //   3.1 Return unauthorized error (Not sure if I should throw an exception or return the status code directl
 }
 
 function logout(ctx, callback) {
   // TODO
 }
 
-export { getCookie, logout, logIn, setCookie };
+function nextAuth(options) {
+  // TODO
+}
+
+export { authenticate, getCookie, logout, logIn, setCookie, nextAuth };
