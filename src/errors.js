@@ -1,4 +1,11 @@
+// @ts-check
+
 class AuthError extends Error {
+  /**
+   * @param {String} message
+   * @param {Number} status
+   * @param params
+   */
   constructor(message, status = 401, ...params) {
     super(...params);
 

@@ -1,10 +1,9 @@
 // @ts-check
 
 import { parse, serialize } from "cookie";
-import { NextApiRequest, NextApiResponse } from "next";
 
 /**
- * @param {NextApiResponse} res
+ * @param {ServerResponse} res
  * @param {string} value
  * @param {object} options
  * @returns {string} encrypted
@@ -23,7 +22,7 @@ function setCookie(res, value, options = { name: "token" }) {
 }
 
 /**
- * @param {NextApiRequest} req
+ * @param {IncomingRequest} req
  * @param {string} name
  * @returns {string}
  */

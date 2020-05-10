@@ -43,6 +43,7 @@
     "express": "^4.17.1",
     "jest": "^25.5.3",
     "prettier": "^2.0.5",
+    "querystring": "^0.2.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "rollup": "^0.68.2",
@@ -57,7 +58,6 @@
     "cookie": "^0.4.1",
     "core-js": "^3.6.4",
     "jsonwebtoken": "^8.5.1",
-    "next": "^9.3.6",
     "regenerator-runtime": "^0.13.3",
     "simple-encryptor": "^3.0.0"
   },

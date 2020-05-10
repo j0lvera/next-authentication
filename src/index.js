@@ -2,12 +2,15 @@
 
 import { setCookie, getCookie } from "./cookies";
 import { AuthError } from "./errors";
+import { nextAuth } from "./middleware";
+import { parseBody } from "./utils";
 
 /**
  * Requires a `verify` function that accepts username and password and returns a
  * user object or a falsy value.
  *
- * `req.body` comes parsed using API middlewares.
+ * `req.body` comes parsed using API middlewares. But in case the user turned off
+ * the parsing option, we run our own parser.
  * https://nextjs.org/docs/api-routes/api-middlewares
  *
  * @param {IncomingMessage} req
@@ -17,6 +20,10 @@ import { AuthError } from "./errors";
 async function authenticate(req, verify) {
   if (!verify) {
     throw new Error("The `verify` function parameter is missing");
+  }
+
+  if (!req.body) {
+    req.body = await parseBody(req);
   }
 
   const { username, password } = req.body;
@@ -33,10 +40,6 @@ function logIn() {
 }
 
 function logout(ctx, callback) {
-  // TODO
-}
-
-function nextAuth(options) {
   // TODO
 }
 
