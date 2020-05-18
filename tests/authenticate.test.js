@@ -1,7 +1,7 @@
 const request = require("supertest");
 const express = require("express");
 const bodyParser = require("body-parser");
-import { authenticate } from "../src/index";
+import { authenticate } from "../src";
 import { AuthError } from "../src/errors";
 
 describe("authenticate", () => {

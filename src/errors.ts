@@ -1,12 +1,7 @@
-// @ts-check
-
 class AuthError extends Error {
-  /**
-   * @param {String} message
-   * @param {Number} status
-   * @param params
-   */
-  constructor(message, status = 401, ...params) {
+  private status: number;
+
+  constructor(message: string, status = 401, ...params: undefined[]) {
     super(...params);
 
     if (Error.captureStackTrace) {

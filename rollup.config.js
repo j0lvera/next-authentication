@@ -1,21 +1,13 @@
-import commonjs from "rollup-plugin-commonjs";
-import babel from "rollup-plugin-babel";
-import resolve from "rollup-plugin-node-resolve";
-import external from "rollup-plugin-peer-deps-external";
+import typescript from "@rollup/plugin-typescript";
 import pkg from "./package.json";
 
 export default [
   {
-    input: "src/index.js",
+    input: "src/index.ts",
     output: [
       { file: pkg.main, format: "cjs" },
       { file: pkg.module, format: "es" },
     ],
-    plugins: [
-      external(),
-      babel({ exclude: "node_modules/**", runtimeHelpers: true }),
-      resolve(),
-      commonjs(),
-    ],
+    plugins: [typescript()],
   },
 ];

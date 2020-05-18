@@ -1,7 +1,6 @@
 const request = require("supertest");
 const http = require("http");
 const { nextAuth } = require("../src/middleware");
-const { AuthError } = require("../src/errors");
 
 describe("middleware nextAuth", () => {
   const verify = (username, password) => {
@@ -14,7 +13,7 @@ describe("middleware nextAuth", () => {
     })
   );
 
-  it("foo", async () => {
+  it("should return 200 if we send the right credentials", async () => {
     const response = await request(server)
       .post("/")
       .send("username=jolvera&password=1234abc");

@@ -1,9 +1,7 @@
-import qs from "querystring";
+import * as qs from "querystring";
+import { Request } from "../authentication/types";
 
-/**
- * @param {IncomingRequest} req
- */
-function parseBody(req) {
+function parseBody(req: Request) {
   const contentType = req.headers["content-type"];
   const isForm = contentType === "application/x-www-form-urlencoded";
   const isJson = contentType === "application/json";
@@ -24,9 +22,9 @@ function parseBody(req) {
         }
       });
     } else {
-      reject(new Error(`Not supported content type ${contentType}`));
+      reject(new Error(`Content type ${contentType} not supported`));
     }
   });
 }
 
-export default parseBody;
+export { parseBody };
