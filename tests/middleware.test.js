@@ -1,13 +1,19 @@
 const request = require("supertest");
 const http = require("http");
-const { nextAuth } = require("../src/middleware");
+const { authenticate } = require("../src/middlewares");
 
-describe("middleware nextAuth", () => {
+describe("middleware authenticate", () => {
   const verify = (username, password) => {
     return { username };
   };
+
+  const options = {
+    verify,
+    secret: "asecretthatsatleast16charslong",
+  };
+
   const server = http.createServer(
-    nextAuth(verify)((req, res) => {
+    authenticate(options)((req, res) => {
       res.writeHead(200, { "Content-Type": "text/plain" });
       res.end("ok");
     })

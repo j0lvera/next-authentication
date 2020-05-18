@@ -1,5 +1,5 @@
 import * as qs from "querystring";
-import { Request } from "../authentication/types";
+import { Request } from "../middlewares/types";
 
 function parseBody(req: Request) {
   const contentType = req.headers["content-type"];

@@ -5,6 +5,12 @@ interface VerifyFunction {
   (username: string, password: string): Promise<object>;
 }
 
+interface NextAuthOptions {
+  verify: VerifyFunction;
+  secret: string;
+  expiresIn?: string;
+}
+
 type Request = IncomingMessage & NowRequest;
 
-export { VerifyFunction, Request };
+export { VerifyFunction, Request, NextAuthOptions };
