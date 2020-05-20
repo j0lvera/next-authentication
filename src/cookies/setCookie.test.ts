@@ -15,7 +15,7 @@ describe("setCookie", () => {
 
   const agent = request.agent(server);
 
-  it("should save cookies", async done => {
+  it("should save cookies", async (done) => {
     agent
       .get("/")
       .expect(
