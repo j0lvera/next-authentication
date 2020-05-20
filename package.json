@@ -78,7 +78,7 @@
     }
   },
   "lint-staged": {
-    "*.ts": "eslint --cache --fix",
+    "*.ts": "npm run lint",
     "*.ts": "npm test",
     "*.{js,css,md}": "prettier --write"
   }
