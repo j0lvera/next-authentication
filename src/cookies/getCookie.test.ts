@@ -9,6 +9,7 @@ describe("getCookie", () => {
 
   const server = http.createServer((req, res) => {
     if ("cookie" in req.headers) {
+      // eslint-disable-next-line
       // @ts-ignore
       const cookie = getCookie(req);
       res.end(cookie);

@@ -10,11 +10,15 @@ const authenticate = (
   verify: VerifyFunction,
   secret: string,
   cookieOptions: CookieSerializeOptions
-) => async (req: NextAuthRequest, res: ServerResponse) => {
+) => async (
+  req: NextAuthRequest,
+  res: ServerResponse
+): Promise<Function | undefined> => {
   try {
     // `req.body` comes parsed using API middleware. But in case the user
     // turned off the parsing option, we run our own parser.
     // https://nextjs.org/docs/api-routes/api-middlewares
+
     const { username, password } = req.body ?? (await parseBody(req));
 
     if (!username || !password) {

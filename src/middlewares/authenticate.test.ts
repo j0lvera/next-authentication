@@ -6,7 +6,8 @@ import { nextAuth } from "../index";
 describe("authenticate", () => {
   describe("as middleware", () => {
     const options = {
-      verify: async (username: string, password: string) => {
+      verify: async (username: string, password: string): Promise<object> => {
+        console.log("password", password);
         return { username };
       },
       secret: "asecretthatsatleast16charslong",
@@ -17,6 +18,7 @@ describe("authenticate", () => {
     const server = http.createServer(
       // We don't need to check the type here since we are using this to mimic
       // a Next.js API route
+      // eslint-disable-next-line
       // @ts-ignore
       authenticate((req: IncomingMessage, res: ServerResponse) => {
         res.writeHead(200, { "Content-Type": "text/plain" });
@@ -41,6 +43,4 @@ describe("authenticate", () => {
       );
     });
   });
-
-  describe("as a standlone function", () => {});
 });

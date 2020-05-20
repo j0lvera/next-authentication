@@ -6,11 +6,13 @@ import { AuthError } from "../errors";
 const authorize = (handler: Function, secret: string) => async (
   req: NextAuthRequest,
   res: NextAuthResponse
-) => {
+): Promise<Function | undefined> => {
   try {
     const token = getCookie(req);
     const userObj = decrypt(token, secret);
-    const isAuthorized = token != null && userObj != null;
+
+    // false on empty strings
+    const isAuthorized = Boolean(token) && Boolean(userObj);
 
     if (!isAuthorized) {
       throw new AuthError("Invalid credentials", 403);

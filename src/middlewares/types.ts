@@ -15,7 +15,7 @@ interface NextAuthOptions {
 type NextAuthRequest = IncomingMessage & NowRequest;
 
 interface NextAuthResponse extends ServerResponse {
-  user?: object;
+  user?: string | object;
   authorized?: boolean;
 }
 

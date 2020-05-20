@@ -1,7 +1,6 @@
 import request from "supertest";
 import http from "http";
 import { setCookie } from "./setCookie";
-import { getCookie } from "./getCookie";
 
 describe("setCookie", () => {
   const defaultCookieName = "next-authentication-token";
