@@ -16,7 +16,7 @@ describe("authenticate", () => {
     const { authenticate } = nextAuth(options);
 
     const server = http.createServer(
-      // We don't need to check the type here since we are using this to mimic
+      // We don't need to type check here since we are using this server to mimic
       // a Next.js API route
       // eslint-disable-next-line
       // @ts-ignore

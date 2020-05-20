@@ -29,7 +29,7 @@ describe("authorize", () => {
     };
 
     const server = http.createServer(
-      // We don't need to check the type here since we are using this to mimic
+      // We don't need to type check here since we are using this server to mimic
       // a Next.js API route
       // eslint-disable-next-line
       // @ts-ignore
@@ -41,16 +41,13 @@ describe("authorize", () => {
 
     it("should return 200 if we send a request with a valid cookie", async () => {
       const cookie = generateCookie(options.secret);
-      const response = await request(server)
-        .get("/")
-        .set("Cookie", cookie)
-        .set("Accept", "application/json");
+      const response = await request(server).get("/").set("Cookie", cookie);
 
       expect(response.status).toBe(200);
       expect(response.text).toEqual(JSON.stringify({ message: "ok" }));
     });
 
-    it("should return 403 if we send a request with cookie but invalid data", async () => {
+    it("should return 403 if we send a request with a cookie but invalid data", async () => {
       const invalidCookie = generateCookie("notthesecretweexpect");
       const response = await request(server)
         .get("/")
@@ -62,7 +59,7 @@ describe("authorize", () => {
       );
     });
 
-    it("should return 403 if we send a request without cookies", async () => {
+    it("should return 403 if we send a request without a cookie", async () => {
       const response = await request(server).get("/");
 
       expect(response.status).toBe(403);
