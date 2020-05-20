@@ -1,13 +1,15 @@
-const request = require("supertest");
-const http = require("http");
-const { setCookie, getCookie } = require("../src/cookies");
+import request from "supertest";
+import http from "http";
+import { setCookie } from "./setCookie";
+import { getCookie } from "./getCookie";
 
-describe("setCookie", () => {
-  const defaultCookieName = "token";
+describe("getCookie", () => {
+  const defaultCookieName = "next-authentication-token";
   const id = "e296443f-9111-44ef-860c-37a6c9facc2e";
 
   const server = http.createServer((req, res) => {
     if ("cookie" in req.headers) {
+      // @ts-ignore
       const cookie = getCookie(req);
       res.end(cookie);
       return;

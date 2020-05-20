@@ -1,7 +1,7 @@
 import * as qs from "querystring";
-import { Request } from "../middlewares/types";
+import { NextAuthRequest } from "../middlewares/types";
 
-function parseBody(req: Request) {
+function parseBody(req: NextAuthRequest) {
   const contentType = req.headers["content-type"];
   const isForm = contentType === "application/x-www-form-urlencoded";
   const isJson = contentType === "application/json";
