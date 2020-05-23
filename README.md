@@ -1,104 +1,60 @@
 # Next Authentication
+
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fj0lv3r4%2Fnext-authentication.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fj0lv3r4%2Fnext-authentication?ref=badge_shield)
 
+> Authentication &amp; Authorization for Next.js.
 
-`next-authentication` is an authentication &amp; authorization library for the Next framework. It provides user session management and handles logging in, logging out.
-
-## Features:
-
-- Backend agnostic. You are in charge of implementing the login and registration in the backend with the language you prefer.
-- You can optionally use the `login` and `logout` helper functions or implement your own.
-- Restricts pages to logged-in users using the `withAuth` HOC or the `auth` helper function.
-
-## Installation
-
-`next-authentication` is published to npm:
-
-```
-$ npm i next-authentication --save
-```
+Next Authentication provides a set of functions to implement Authentication and Authorization in Next.js applications.
 
 ## Usage
 
-### Login a user
-
 ```js
-import { login } from 'next-authentication';
+// Setup
+// lib/auth.js
 
-try {
-  const response = await fetch('https://apiurl.io', {
-    method: 'post',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password })
-  });
+import bcrypt from 'bcrypt';
+import { nextAuth } from 'next-authentication';
 
-  if (response.ok) {
-    const { token } = await response.json();
-    const loginOptions = {
-      token,
-      cookieOptions: {
-        maxAge: 30 * 24 * 60 * 60,
-        path: "/"
-      },
-      callback: () => Router.push("/profile")
-    };
+const nextAuthOptions = {
+  verify: async (username, password) => {
+    // Pseudo code that verifies a user in a fictitious database
+    const user = await User.query().findOne({ username });
+    const validPassword = bcrypt.compareSync(password, user.hash);
 
-    login(loginOptions);
-  } else {
-    console.log('Login failed.');
-  }
-} catch (error) {
-  console.log('Implementation or Network error.');
-}
-```
-
-### Logout
-
-```js
-import Link from 'next/link';
-import Router from 'next/router';
-import { logout } from 'next-authorization';
-
-const Header = props => {
-  const redirect = () => Router.push('/login');
-  const userLogout = () => logout(redirect);
-  return (
-    <header>
-      <nav>
-        <Link href="/">
-          <a>Home</a>
-        </Link>
-        <Link href="/login">
-          <a>Login</a>
-        </Link>
-        <button onClick={userLogout}>Logout</button>
-      </nav>
-    </header>
-  );
+    if (validPassword) {
+        return { username: user.username };    
+    }
+  },
+  secret: process.env.SECRET || 'alongsecretvaluethatsatleast16chars'
 }
 
-export default Header;
-```
+export const { authenticate, authorize } = nextAuth(nextAuthOptions);
 
-### Restrict pages to logged-in users
+// Authenticate
+// pages/api/authenticate.js
 
-```js
-import Router from 'next/router'
-import withAuth from 'next-authentication'
+import { authenticate } from '../lib/auth.js'
 
-const Profile = props => <div>User is logged in</div>
-
-const authOptions = {
-  // client callback for invalid sessions
-  callback: () => Router.push('/login'),
-  // the server takes care of the redirect, only pass a string
-  // with the route
-  serverRedirect: '/login'
+const handler = (req, res) => {
+  res.status(300).json({ message: 'ok' });
 }
-export default withAuth(authOptions)(Profile);
+
+export default authenticate(handler);
+
+// Authorize
+// pages/api/restricted-content.js
+
+import { authorize } from '../lib/auth.js';
+
+const handler = (req, res) => {
+  console.log('is authorized', res.isAuthorized);
+  res.status(200).json({ user: res.user })
+}
+
+export default authorize(handler);
 ```
 
-## next-authorization API
+## API
 
 ### login(ctx, config)
 
@@ -147,6 +103,15 @@ auth({
   },
   content: ctx // context instance from `getInitnialProps`,
 });
+```
+
+
+## Installation
+
+With [npm](https://npmjs.com):
+
+```
+$ npm i next-authentication --save
 ```
 
 
