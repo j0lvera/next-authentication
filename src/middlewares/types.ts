@@ -1,4 +1,3 @@
-import { IncomingMessage, ServerResponse } from "http";
 import { NowRequest } from "@now/node";
 import { CookieSerializeOptions } from "cookie";
 import { GetServerSidePropsContext } from "next";
