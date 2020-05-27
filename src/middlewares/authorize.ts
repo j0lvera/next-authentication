@@ -6,7 +6,7 @@ import {
   PropsContext,
 } from "./types";
 import { decrypt } from "../utils";
-import { getCookie } from "../cookies";
+import { getCookie, deleteCookie } from "../cookies";
 import { AuthError } from "../errors";
 
 const authorize = (handler: Function, options: AuthorizeOptions) => async (
@@ -37,11 +37,10 @@ const authorize = (handler: Function, options: AuthorizeOptions) => async (
     req.user = userObj;
     req.authorized = isAuthorized;
 
-    if (isApi) {
-      return handler(req, res);
-    }
-    return handler(args[0]);
+    return isApi ? handler(req, res) : handler(args[0]);
   } catch (error) {
+    deleteCookie(res);
+
     if (isApi) {
       res.statusCode = error.status ?? 500;
       res.setHeader("Content-Type", "application/json");

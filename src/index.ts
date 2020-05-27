@@ -1,9 +1,10 @@
 import { AuthorizeOptions, NextAuthOptions } from "./middlewares/types";
-import { authenticate, authorize } from "./middlewares";
+import { authenticate, authorize, logout } from "./middlewares";
 
 interface NextAuthObject {
   authenticate: (handler: Function) => Function;
   authorize: (handler: Function) => Function;
+  logout: (handler: Function) => Function;
 }
 
 const cookieDefaultOptions = {
@@ -30,6 +31,7 @@ function nextAuth({
       authenticate(handler, verify, secret, cookieOptions),
     authorize: (handler: Function): Function =>
       authorize(handler, authorizeOptions),
+    logout: (handler: Function): Function => logout(handler, authorizeOptions),
   };
 }
 
