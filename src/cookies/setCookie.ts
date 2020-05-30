@@ -8,11 +8,7 @@ const setCookie = (
 ): void => {
   res.setHeader(
     "Set-Cookie",
-    serialize("next-authentication-token", value, {
-      httpOnly: true,
-      maxAge: 60 * 60 * 24 * 7, // 1 week,
-      ...options,
-    })
+    serialize("next-authentication-token", value, options)
   );
 };
 

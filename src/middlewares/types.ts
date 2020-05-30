@@ -10,7 +10,7 @@ interface VerifyFunction {
 interface NextAuthOptions {
   verify: VerifyFunction;
   secret: string;
-  cookieOptions?: CookieSerializeOptions;
+  cookieUserOptions?: CookieSerializeOptions;
   redirectOnError?: boolean;
   redirectUrl?: string;
 }
