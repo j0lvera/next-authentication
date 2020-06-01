@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { logout } from "../../../dist/next-authentication.esm";
-import Router from "next/router";
 
 const Header = (props) => (
   <header>
@@ -17,14 +15,28 @@ const Header = (props) => (
           </Link>
         </li>
         <li>
+          <Link href="/signup">
+            <a>Signup</a>
+          </Link>
+        </li>
+        <li>
           <Link href="/profile">
             <a>Profile</a>
+          </Link>
+        </li>
+
+        <li>
+          <Link href="/profile-ssr">
+            <a>Profile SSR</a>
           </Link>
         </li>
         <li>
           <button
             onClick={() => {
-              logout({}, () => Router.push("/login"));
+              fetch("/api/logout")
+                .then((response) => response.json())
+                .then((js) => console.log("json", js))
+                .catch((error) => console.log("error"));
             }}
           >
             Logout

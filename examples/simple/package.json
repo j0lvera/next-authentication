@@ -1,16 +1,23 @@
 {
-  "name": "with-cookie-auth",
+  "name": "next-authentication-example-simple",
   "scripts": {
     "dev": "next",
     "build": "next build",
     "start": "next start"
   },
   "dependencies": {
+    "bcrypt": "^4.0.1",
     "isomorphic-unfetch": "^3.0.0",
     "js-cookie": "^2.2.0",
-    "next": "^9.0.3",
+    "knex": "^0.21.1",
+    "next": "^9.4.2",
     "next-cookies": "^1.0.4",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "objection": "^2.1.5",
+    "react": "^16.12.0",
+    "react-dom": "^16.8.6",
+    "sqlite3": "^4.2.0"
+  },
+  "devDependencies": {
+    "prettier": "^1.19.1"
   }
 }
