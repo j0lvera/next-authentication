@@ -2,28 +2,40 @@
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fj0lv3r4%2Fnext-authentication.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fj0lv3r4%2Fnext-authentication?ref=badge_shield)
 
-> Authentication &amp; Authorization for Next.js.
+> Authentication &amp; Authorization for Next.js
 
-Next Authentication provides a set of functions to implement Authentication and Authorization in Next.js applications.
+next-authentication provides a set of functions and middlewares to implement Authentication, Authorization and session management in Next.js applications.
 
 ## Usage
 
 ```js
 // Setup
-// lib/auth.js
+// file: lib/auth.js
 
 import bcrypt from 'bcrypt';
-import { nextAuth } from 'next-authentication';
+import { nextAuth, AuthError } from 'next-authentication';
+import { User } from '../user/model';
 
-const nextAuthOptions = {
+const nextAuthOptions = {   
+  // Pseudo code that verifies a user in a fictitious database
   verify: async (username, password) => {
-    // Pseudo code that verifies a user in a fictitious database
-    const user = await User.query().findOne({ username });
-    const validPassword = bcrypt.compareSync(password, user.hash);
+      try {
+        const user = await User.query().findOne({ username });
 
-    if (validPassword) {
-        return { username: user.username };    
-    }
+        if (!user) {
+          throw new AuthError('User does not exist', 404);
+        }
+
+        const valid = bcrypt.compareSync(password, user.password);
+
+        if (!valid) {
+          throw new AuthError('Invalid credentials', 403);
+        }
+
+        return { user: user.username }
+      } catch (error) {
+        throw new AuthError(`Error trying to verifying the user: ${error.message}`, 500);
+      }
   },
   secret: process.env.SECRET || 'alongsecretvaluethatsatleast16chars'
 }
@@ -31,18 +43,18 @@ const nextAuthOptions = {
 export const { authenticate, authorize } = nextAuth(nextAuthOptions);
 
 // Authenticate
-// pages/api/authenticate.js
+// file: pages/api/authenticate.js
 
 import { authenticate } from '../lib/auth.js'
 
 const handler = (req, res) => {
-  res.status(300).json({ message: 'ok' });
+  res.status(200).json({ message: 'User logged in', user: req.user });
 }
 
 export default authenticate(handler);
 
 // Authorize
-// pages/api/restricted-content.js
+// file: pages/api/restricted-content.js
 
 import { authorize } from '../lib/auth.js';
 
@@ -56,55 +68,37 @@ export default authorize(handler);
 
 ## API
 
-### login(ctx, config)
+### `nextAuth(options={})`
 
-`next-authentication` uses [`nookies`](https://www.npmjs.com/package/nookies) for cookie handling so you can pass the same configuration object to the `cookieOptions` option.
+The main function of the library that consumes an option object and returns an object with the functions you to use for authenticate, authorize, and log out users.
 
-```js
-// Login a user
-login(ctx, {
-  token: '',
-  cookieOptions: {
-    maxAge: 30 * 24 * 60 * 60,
-    path: '/',
-  },
-  callback: () => {
-    console.log('Do something after the user is logged in.')
-  }
-});
-```
+#### `Options`
 
-### logout(ctx, callback)
+An object containing required and optional configuration elements. Valid `options` keys include:
 
-```js
-logout(ctx, () => {
-  console.log('Do something after the user is logged out.')
-});
-```
+##### `verify(username, password)` (required)
 
-### withAuth(config)
+A function that takes a username and a password and must return an object containing at least the key `username`. The function should run the logic to verify the veracity of the user identity.
 
-```js
-withAuth({
-  serverRedirect: '/login',
-  onError: (ctx) => {
-    console.log('Do something if the session is invalid.')
-  },
-})(Component);
-```
+### `authenticate(handler, verify, secret, cookieOptions)`
 
-### auth(config)
+A function middleware that helps to verify the authenticity of the user identity.
 
-```js
-auth({
-  serverRedirect: '/login',
-  callback: () => {
-    console.log('Do something if the session is invalid.');
-  },
-  content: ctx // context instance from `getInitnialProps`,
-});
-```
+#### `handler(req, res)`
 
+A request handler.
+
+#### `verify(username, password)`
+
+A function that verifies the authenticity of the user identity.
+
+#### `secret` \<string\>
+
+A secret string that's at least 16 chars long.
+
+#### `cookieOptions` \<Object\>
+
+To handle cookies the library uses the [`cookie` module](https://www.npmjs.com/package/cookie). We pass the object directly to the parse method in `cookie.parse` so it accepts [the same options](https://www.npmjs.com/package/cookie#options).
 
 ## Installation
 
