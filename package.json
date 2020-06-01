@@ -4,11 +4,13 @@
   "description": "Authentication & Authorization Library for the Next.js Framework",
   "main": "dist/next-authentication.js",
   "module": "dist/next-authentication.esm.js",
-  "source": "src/index.js",
+  "source": "src/index.ts",
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -w",
-    "release": "cross-var npm run build && cross-var git commit -am $npm_package_version && cross-var git tag $npm_package_version && git push && git push --tags && npm publish"
+    "release": "cross-var npm run build && cross-var git commit -am $npm_package_version && cross-var git tag $npm_package_version && git push && git push --tags && npm publish",
+    "test": "jest",
+    "lint": "eslint src --ext .ts"
   },
   "repository": {
     "type": "git",
@@ -31,24 +33,51 @@
   },
   "homepage": "https://github.com/j0lv3r4/next-authentication",
   "devDependencies": {
-    "@babel/core": "^7.2.2",
-    "@babel/preset-env": "^7.2.3",
-    "@babel/preset-react": "^7.0.0",
+    "@babel/core": "^7.9.6",
+    "@babel/helper-call-delegate": "^7.8.7",
+    "@babel/plugin-transform-modules-commonjs": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/preset-react": "^7.9.4",
+    "@babel/preset-typescript": "^7.9.0",
+    "@now/node": "^1.6.1",
+    "@rollup/plugin-commonjs": "^11.1.0",
+    "@rollup/plugin-node-resolve": "^7.1.3",
+    "@rollup/plugin-typescript": "^4.1.1",
+    "@types/cookie": "^0.4.0",
+    "@types/jest": "^25.2.3",
+    "@types/node": "^13.13.6",
+    "@types/supertest": "^2.0.9",
+    "@typescript-eslint/eslint-plugin": "^2.34.0",
+    "@typescript-eslint/parser": "^2.34.0",
+    "babel-jest": "^25.5.1",
     "cross-var": "^1.1.0",
-    "prettier": "^1.15.3",
-    "react": "^16.12.0",
-    "rollup": "^0.68.2",
-    "rollup-plugin-babel": "^4.1.0",
-    "rollup-plugin-commonjs": "^9.2.0",
-    "rollup-plugin-node-resolve": "^4.0.0",
-    "rollup-plugin-peer-deps-external": "^2.2.2"
+    "crypto": "^1.0.1",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2",
+    "husky": "^4.2.5",
+    "jest": "^26.0.0",
+    "next": "^9.4.2",
+    "np": "^6.2.3",
+    "prettier": "^2.0.5",
+    "querystring": "^0.2.0",
+    "rollup": "^2.10.2",
+    "rollup-plugin-analyzer": "^3.2.3",
+    "supertest": "^4.0.2",
+    "ts-jest": "^26.0.0",
+    "tslib": "^2.0.0",
+    "typescript": "^3.9.2"
   },
   "dependencies": {
-    "core-js": "^3.6.4",
-    "nookies": "^2.0.8",
-    "regenerator-runtime": "^0.13.3"
+    "cookie": "^0.4.1",
+    "simple-encryptor": "^3.0.0"
   },
-  "peerDependencies": {
-    "react": "^16.12.0"
+  "np": {
+    "yarn": false
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint && npm test"
+    }
   }
 }

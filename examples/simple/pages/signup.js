@@ -1,11 +1,10 @@
-import React, { useState } from "react";
 import fetch from "isomorphic-unfetch";
 import Layout from "../components/layout";
 import Form from "../components/form";
 
-function Login() {
-  function loginRequest({ username, password }) {
-    return fetch("/api/login", {
+function Signup() {
+  function signupRequest({ username, password }) {
+    return fetch("/api/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
@@ -14,12 +13,12 @@ function Login() {
 
   return (
     <Layout>
-      <div className="login">
-        <h2>Login</h2>
+      <div className="signup">
+        <h2>Signup</h2>
         <Form
-          request={loginRequest}
-          redirectUrl={"/profile"}
-          successMsg={"Login successful"}
+          request={signupRequest}
+          redirectUrl={"/login"}
+          successMsg={"User created. Redirecting to login page."}
         />
       </div>
       <style jsx>{`
@@ -31,4 +30,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Signup;

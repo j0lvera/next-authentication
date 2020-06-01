@@ -2,7 +2,7 @@ import React from "react";
 import Head from "next/head";
 import Header from "./header";
 
-const Layout = props => (
+const Layout = (props) => (
   <React.Fragment>
     <Head>
       <title>With Cookies</title>
