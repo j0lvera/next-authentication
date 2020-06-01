@@ -58,6 +58,7 @@
     "husky": "^4.2.5",
     "jest": "^26.0.0",
     "next": "^9.4.2",
+    "np": "^6.2.3",
     "prettier": "^2.0.5",
     "querystring": "^0.2.0",
     "rollup": "^2.10.2",
@@ -70,6 +71,10 @@
   "dependencies": {
     "cookie": "^0.4.1",
     "simple-encryptor": "^3.0.0"
+  },
+  "np": {
+    "yarn": false,
+    "contents": "dist"
   },
   "husky": {
     "hooks": {
