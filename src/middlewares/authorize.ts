@@ -1,9 +1,9 @@
 import {
   NextAuthRequest,
   NextAuthResponse,
-  AuthorizeOptions,
   AuthorizeArgs,
   PropsContext,
+  AuthorizeOptions,
 } from "./types";
 import { decrypt } from "../utils";
 import { getCookie, deleteCookie } from "../cookies";
@@ -12,6 +12,7 @@ import { AuthError } from "../errors";
 const authorize = (handler: Function, options: AuthorizeOptions) => async (
   ...args: AuthorizeArgs
 ): Promise<Function | undefined> => {
+  const { secret, redirectOnError, redirectUrl } = options;
   const isApi = args.length > 1;
 
   // One argument means we are in `getServerSideProps` and `context` is passed,
@@ -25,7 +26,7 @@ const authorize = (handler: Function, options: AuthorizeOptions) => async (
 
   try {
     const token = getCookie(req);
-    const userObj = decrypt(token, options.secret);
+    const userObj = decrypt(token, secret);
 
     // false on empty strings
     const isAuthorized = Boolean(token) && Boolean(userObj);
@@ -49,8 +50,8 @@ const authorize = (handler: Function, options: AuthorizeOptions) => async (
     }
 
     // getServerSideProps
-    if (options.redirectOnError) {
-      res.writeHead(301, { Location: options.redirectUrl });
+    if (redirectOnError) {
+      res.writeHead(301, { Location: redirectUrl });
       res.end();
       return;
     }

@@ -15,6 +15,23 @@ interface NextAuthOptions {
   redirectUrl?: string;
 }
 
+interface AuthorizeOptions {
+  secret: string;
+  redirectOnError: boolean;
+  redirectUrl: string;
+}
+
+interface AuthenticateOptions {
+  verify: VerifyFunction;
+  secret: string;
+  cookieUserOptions: CookieSerializeOptions;
+}
+
+interface LogoutOptions {
+  redirectOnError: boolean;
+  redirectUrl: string;
+}
+
 interface NextAuthRequest extends NowRequest {
   user?: string | object;
   authorized?: boolean;
@@ -29,18 +46,14 @@ interface PropsContext extends GetServerSidePropsContext {
 
 type AuthorizeArgs = NextAuthRequest[] | NextAuthResponse[] | PropsContext[];
 
-interface AuthorizeOptions {
-  secret: string;
-  redirectOnError: boolean;
-  redirectUrl: string;
-}
-
 export {
   VerifyFunction,
   NextAuthRequest,
   NextAuthResponse,
   NextAuthOptions,
   AuthorizeOptions,
+  AuthenticateOptions,
+  LogoutOptions,
   AuthorizeArgs,
   PropsContext,
 };

@@ -1,19 +1,28 @@
 import { ServerResponse } from "http";
 import { setCookie } from "../cookies";
 import { encrypt, parseBody } from "../utils";
-import { NextAuthRequest, VerifyFunction } from "./types";
+import { NextAuthRequest, AuthenticateOptions } from "./types";
 import { AuthError } from "../errors";
-import { CookieSerializeOptions } from "cookie";
 
 const authenticate = (
-  fn: Function,
-  verify: VerifyFunction,
-  secret: string,
-  cookieOptions: CookieSerializeOptions
+  handler: Function,
+  options: AuthenticateOptions
 ) => async (
   req: NextAuthRequest,
   res: ServerResponse
 ): Promise<Function | undefined> => {
+  const { cookieUserOptions, secret, verify } = options;
+  const cookieDefaultOptions = {
+    httpOnly: true,
+    maxAge: 60 * 60 * 24, // 24 hours
+    path: "/",
+  };
+
+  const cookieOptions = {
+    ...cookieDefaultOptions,
+    cookieUserOptions,
+  };
+
   try {
     // `req.body` comes parsed using API middleware. But in case the user
     // turned off the parsing option, we run our own parser.
@@ -30,7 +39,7 @@ const authenticate = (
 
     setCookie(res, token, cookieOptions);
 
-    return fn(req, res);
+    return handler(req, res);
   } catch (error) {
     res.statusCode = error.status ?? 500;
     res.setHeader("Content-Type", "application/json");

@@ -1,13 +1,13 @@
 import { deleteCookie } from "../cookies";
 import {
   AuthorizeArgs,
-  AuthorizeOptions,
+  LogoutOptions,
   NextAuthRequest,
   NextAuthResponse,
   PropsContext,
 } from "./types";
 
-const logout = (handler: Function, options: AuthorizeOptions) => async (
+const logout = (handler: Function, options: LogoutOptions) => async (
   ...args: AuthorizeArgs
 ) => {
   const isApi = args.length > 1;

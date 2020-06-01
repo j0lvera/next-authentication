@@ -1,4 +1,4 @@
-import { AuthorizeOptions, NextAuthOptions } from "./middlewares/types";
+import { NextAuthOptions, VerifyFunction } from "./middlewares/types";
 import { authenticate, authorize, logout } from "./middlewares";
 import { AuthError } from "./errors";
 
@@ -8,12 +8,6 @@ interface NextAuthObject {
   logout: (handler: Function) => Function;
 }
 
-const cookieDefaultOptions = {
-  httpOnly: true,
-  maxAge: 60 * 60 * 24, // 24 hours
-  path: "/",
-};
-
 function nextAuth({
   verify,
   secret,
@@ -21,23 +15,17 @@ function nextAuth({
   redirectOnError = true,
   redirectUrl = "/login",
 }: NextAuthOptions): NextAuthObject {
-  const authorizeOptions: AuthorizeOptions = {
-    secret,
-    redirectOnError,
-    redirectUrl,
-  };
-
-  const cookieOptions = {
-    ...cookieDefaultOptions,
-    cookieUserOptions,
-  };
-
   return {
     authenticate: (handler: Function): Function =>
-      authenticate(handler, verify, secret, cookieOptions),
+      authenticate(handler, {
+        verify,
+        secret,
+        cookieUserOptions,
+      }),
     authorize: (handler: Function): Function =>
-      authorize(handler, authorizeOptions),
-    logout: (handler: Function): Function => logout(handler, authorizeOptions),
+      authorize(handler, { secret, redirectOnError, redirectUrl }),
+    logout: (handler: Function): Function =>
+      logout(handler, { redirectOnError, redirectUrl }),
   };
 }
 
