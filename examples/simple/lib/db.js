@@ -1,5 +1,5 @@
-import { Model } from "objection";
-import Knex from "knex";
+const { Model }  = require("objection");
+const Knex = require("knex");
 
 // Initialize knex
 const knex = Knex({
@@ -46,8 +46,4 @@ async function createSchema() {
   });
 }
 
-createSchema()
-  .then(() => console.log("Database created"))
-  .catch((error) => console.log("Error creating the database", error));
-
-export { User };
+module.exports = { User, createSchema };

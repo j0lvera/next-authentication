@@ -5,7 +5,7 @@ import Header from "./header";
 const Layout = (props) => (
   <React.Fragment>
     <Head>
-      <title>With Cookies</title>
+      <title>Next.js Authentication example</title>
     </Head>
     <style jsx global>{`
       *,
@@ -27,6 +27,10 @@ const Layout = (props) => (
         margin: 1.5rem auto;
         padding-left: 1rem;
         padding-right: 1rem;
+      }
+
+      code {
+        font-weight: bold;
       }
     `}</style>
     <Header />

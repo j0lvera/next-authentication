@@ -18,6 +18,7 @@ function Login() {
         <h2>Login</h2>
         <Form
           request={loginRequest}
+          label="login"
           redirectUrl={"/profile"}
           successMsg={"Login successful"}
         />

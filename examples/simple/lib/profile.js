@@ -1,44 +1,37 @@
-import Router from "next/router";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+import useSWR from "swr";
 
-async function fetchProfile(url) {
+async function fetcher(url) {
   const response = await fetch(url);
   if (response.ok) {
-    return await response.json();
+    const data = await response.json();
+    return { user: data?.user || null };
   }
 }
 
-function useFetchProfile(url, required = false) {
-  const [loading, setLoading] = useState(() => true);
-  const [profile, setProfile] = useState({});
+function useProfile(url, redirectTo) {
+  const router = useRouter();
+  const { data, error } = useSWR(url, fetcher);
+  const user = data?.user;
+  const isAuthenticated = Boolean(user);
 
   useEffect(() => {
-    if (!loading) {
+    if (!redirectTo) {
       return;
     }
-    setLoading(true);
-    let isMounted = true;
-    fetchProfile(url)
-      .then(({ user }) => {
-        if (isMounted) {
-          setLoading(false);
-          setProfile(user);
-        }
-      })
-      .catch((error) => {
-        console.log("error", error);
-        required && Router.push("/login");
-      });
 
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+    if (redirectTo && !isAuthenticated) {
+      router.push(redirectTo);
+    }
+  }, [redirectTo, isAuthenticated]);
 
   return {
-    profile,
-    loading,
+    user,
+    error,
+    isAuthenticated,
+    isLoading: !error && !data,
   };
 }
 
-export default useFetchProfile;
+export { useProfile };

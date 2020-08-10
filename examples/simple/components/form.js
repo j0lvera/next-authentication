@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Router from "next/router";
 
-function Form({ request, redirectUrl, successMsg }) {
+function Form({ request, label, redirectUrl, successMsg }) {
   const [userData, setUserData] = useState({
     username: "",
     password: "",
@@ -82,7 +82,7 @@ function Form({ request, redirectUrl, successMsg }) {
         />
       </div>
 
-      <button type="submit">Login</button>
+      <button type="submit">{label}</button>
 
       {userData.error && <p className="error">Error: {userData.error}</p>}
       {userData.successMsg && <p className="success">{userData.successMsg}</p>}

@@ -17,6 +17,7 @@ function Signup() {
         <h2>Signup</h2>
         <Form
           request={signupRequest}
+          label="Signup"
           redirectUrl={"/login"}
           successMsg={"User created. Redirecting to login page."}
         />

@@ -1,13 +1,12 @@
 import React from "react";
 import Layout from "../components/layout";
-import useFetchProfile from "../lib/profile";
+import { useProfile } from "../lib/profile";
 
 const Profile = () => {
-  const { profile, loading } = useFetchProfile("/api/profile", true);
-  console.log("profile", profile);
+  const { user, isLoading } = useProfile("/api/profile", "/");
   return (
     <Layout>
-      {loading ? <p>loading...</p> : <p>Logged in as {profile.username}</p>}
+      {isLoading ? <p>loading...</p> : <p>Logged in as {user.username}</p>}
 
       <style jsx>{`
         p {
