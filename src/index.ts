@@ -11,6 +11,7 @@ interface NextAuthObject {
 function nextAuth({
   verify,
   secret,
+  cookieName = "next-authentication-token",
   cookieUserOptions = {},
   redirectOnError = true,
   redirectUrl = "/login",
@@ -20,10 +21,11 @@ function nextAuth({
       authenticate(handler, {
         verify,
         secret,
+        cookieName,
         cookieUserOptions,
       }),
     authorize: (handler: Function): Function =>
-      authorize(handler, { secret, redirectOnError, redirectUrl }),
+      authorize(handler, { secret, cookieName, redirectOnError, redirectUrl }),
     logout: (handler: Function): Function =>
       logout(handler, { redirectOnError, redirectUrl }),
   };

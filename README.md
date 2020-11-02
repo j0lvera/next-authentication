@@ -19,6 +19,7 @@ import { nextAuth, AuthError } from 'next-authentication';
 import { User } from '../user/model';
 
 const nextAuthOptions = {   
+  cookieName: 'auth-token',
   // Pseudo code that verifies a user in a fictitious database
   verify: async (username, password) => {
       try {
@@ -109,6 +110,10 @@ The main function of the library that takes an option object and returns an obje
 * Returns an object with at least a `username` element. e.g., `{ username: 'jolvera' }`
 
 A function that takes a username and a password and must return an object containing at least the key `username`. The function should run the logic to verify the authenticity of a user's identity.
+
+##### `cookieName` \<string\> (optional)
+
+* Default: "next-authentication-token"
 
 ##### `secret` \<string\> (required)
 

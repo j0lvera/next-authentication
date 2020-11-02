@@ -3,6 +3,7 @@ import { nextAuth, AuthError } from "next-authentication";
 import { User } from "./db";
 
 const options = {
+  cookieName: "auth-token",
   verify: async (username, password) => {
     const user = await User.query().findOne({ username });
     console.log("user", user);

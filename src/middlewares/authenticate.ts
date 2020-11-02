@@ -1,8 +1,8 @@
 import { ServerResponse } from "http";
-import { setCookie } from "../cookies";
 import { encrypt, parseBody } from "../utils";
 import { NextAuthRequest, AuthenticateOptions } from "./types";
 import { AuthError } from "../errors";
+import { serialize } from "cookie";
 
 const authenticate = (
   handler: Function,
@@ -11,8 +11,10 @@ const authenticate = (
   req: NextAuthRequest,
   res: ServerResponse
 ): Promise<Function | undefined> => {
-  const { cookieUserOptions, secret, verify } = options;
+  const { cookieName, cookieUserOptions, secret, verify } = options;
   const cookieDefaultOptions = {
+    SameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
     httpOnly: true,
     maxAge: 60 * 60 * 24, // 24 hours
     path: "/",
@@ -37,7 +39,7 @@ const authenticate = (
     const user = await verify(username, password);
     const token = encrypt(user, secret);
 
-    setCookie(res, token, cookieOptions);
+    res.setHeader("Set-Cookie", serialize(cookieName, token, cookieOptions));
 
     return handler(req, res);
   } catch (error) {

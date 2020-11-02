@@ -12,7 +12,7 @@ import { AuthError } from "../errors";
 const authorize = (handler: Function, options: AuthorizeOptions) => async (
   ...args: AuthorizeArgs
 ): Promise<Function | undefined> => {
-  const { secret, redirectOnError, redirectUrl } = options;
+  const { secret, cookieName, redirectOnError, redirectUrl } = options;
   const isApi = args.length > 1;
 
   // One argument means we are in `getServerSideProps` and `context` is passed,
@@ -25,7 +25,7 @@ const authorize = (handler: Function, options: AuthorizeOptions) => async (
     : (args[0] as PropsContext).res;
 
   try {
-    const token = getCookie(req);
+    const token = getCookie(req, cookieName);
     const userObj = decrypt(token, secret);
 
     // false on empty strings
