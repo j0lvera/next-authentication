@@ -111,6 +111,10 @@ The main function of the library that takes an option object and returns an obje
 
 A function that takes a username and a password and must return an object containing at least the key `username`. The function should run the logic to verify the authenticity of a user's identity.
 
+##### `externalServer` \<boolean\> (optional)
+
+* Default: `false`
+
 ##### `cookieName` \<string\> (optional)
 
 * Default: "next-authentication-token"
