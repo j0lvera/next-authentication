@@ -10,6 +10,7 @@ interface VerifyFunction {
 interface NextAuthOptions {
   verify: VerifyFunction;
   secret: string;
+  externalServer?: boolean;
   cookieName?: string;
   cookieUserOptions?: CookieSerializeOptions;
   redirectOnError?: boolean;
@@ -18,6 +19,7 @@ interface NextAuthOptions {
 
 interface AuthorizeOptions {
   secret: string;
+  externalServer: boolean;
   cookieName?: string;
   redirectOnError: boolean;
   redirectUrl: string;
