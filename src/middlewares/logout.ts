@@ -1,4 +1,3 @@
-import { deleteCookie } from "../cookies";
 import {
   AuthorizeArgs,
   LogoutOptions,
@@ -6,6 +5,7 @@ import {
   NextAuthResponse,
   PropsContext,
 } from "./types";
+import { serialize } from "cookie";
 
 const logout = (handler: Function, options: LogoutOptions) => async (
   ...args: AuthorizeArgs
@@ -21,7 +21,11 @@ const logout = (handler: Function, options: LogoutOptions) => async (
     ? (args[1] as NextAuthResponse)
     : (args[0] as PropsContext).res;
 
-  deleteCookie(res);
+  res.setHeader(
+    "Set-Cookie",
+    serialize(options.cookieName, "", { maxAge: -1, path: "/" })
+  );
+
   req.authorized = false;
 
   if (options.redirectOnError) {

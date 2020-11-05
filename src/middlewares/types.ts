@@ -33,6 +33,7 @@ interface AuthenticateOptions {
 }
 
 interface LogoutOptions {
+  cookieName: string;
   redirectOnError: boolean;
   redirectUrl: string;
 }

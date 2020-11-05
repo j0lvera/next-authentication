@@ -34,7 +34,7 @@ function nextAuth({
         redirectUrl,
       }),
     logout: (handler: Function): Function =>
-      logout(handler, { redirectOnError, redirectUrl }),
+      logout(handler, { cookieName, redirectOnError, redirectUrl }),
   };
 }
 
