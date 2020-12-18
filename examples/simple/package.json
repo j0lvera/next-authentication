@@ -1,7 +1,7 @@
 {
   "name": "next-authentication-example-simple",
   "scripts": {
-    "dev": "next",
+    "dev": "node lib/db-init.js && next",
     "build": "next build",
     "start": "next start"
   },
